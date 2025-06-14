@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .quiz-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .option {
+            padding: 10px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d0d0d0;
+        }
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz Game</h1>
+        <div id="question-container">
+            <div class="question" id="question">Question goes here</div>
+            <div class="options" id="options">
+                <!-- Options will be added dynamically -->
+            </div>
+        </div>
+        <button id="next-button" style="display: none;">Next Question</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Rome"],
+                correctAnswer: "Paris"
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                correctAnswer: "Mars"
+            },
+            {
+                question: "What is the largest mammal?",
+                options: ["Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
+                correctAnswer: "Blue Whale"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const nextButton = document.getElementById("next-button");
+        const resultElement = document.getElementById("result");
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            optionsElement.innerHTML = "";
+
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.classList.add("option");
+                button.addEventListener("click", () => selectAnswer(option));
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function selectAnswer(selectedOption) {
+            const currentQuestion = questions[currentQuestionIndex];
+            if (selectedOption === currentQuestion.correctAnswer) {
+                score++;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionElement.textContent = "Quiz Completed!";
+            optionsElement.innerHTML = "";
+            nextButton.style.display = "none";
+            resultElement.textContent = `Your score: ${score} out of ${questions.length}`;
+        }
+
+        nextButton.addEventListener("click", () => {
+            loadQuestion();
+            nextButton.style.display = "none";
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
